@@ -2,7 +2,8 @@
 
 (provide (all-defined-out))
 
-(require (for-syntax racket/base))
+(require "private/pretty-format.rkt"
+         (for-syntax racket/base))
 
 ;; from mbutterick/sugar, typed/sugar/debug.rkt
 ;; https://github.com/mbutterick/sugar/blob/0ffe3173879cef51d29b4c91a336a4de6c3f8ef8/typed/sugar/debug.rkt
@@ -13,7 +14,7 @@
     [(_ expr) #'(report expr expr)]
     [(_ expr name)
      #'(let ([expr-result expr]) 
-         (eprintf "~a = ~v\n" 'name expr-result)
+         (pretty-eprintf "~a = ~v" 'name expr-result)
          expr-result)]))
 
 
@@ -23,7 +24,7 @@
     [(_ expr name)
      (with-syntax ([line (syntax-line #'expr)])
        #'(let ([expr-result expr])
-           (eprintf "~a = ~v on line ~v\n" 'name expr-result 'line)
+           (pretty-eprintf "~a = ~v on line ~v" 'name expr-result 'line)
            expr-result))]))
 
 
@@ -34,7 +35,7 @@
      (with-syntax ([file (syntax-source #'expr)]
                    [line (syntax-line #'expr)])
        #'(let ([expr-result expr])
-           (eprintf "~a = ~v on line ~v in \"~a\"\n" 'name expr-result 'line 'file)
+           (pretty-eprintf "~a = ~v on line ~v in \"~a\"" 'name expr-result 'line 'file)
            expr-result))]))
 
 
